@@ -1,3 +1,4 @@
+"""
 ## PyBot v.01
 import RPi.GPIO as GPIO
 import time
@@ -128,3 +129,4 @@ while  1:
         GPIO.cleanup()
         break
         
+"""
