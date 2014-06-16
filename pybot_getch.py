@@ -99,8 +99,8 @@ def stop():
 	
 ##main loop
 
+print "Use the WSAD keys to move, z to stop and q to quit"
 while  1:
-    print "Use the WSAD keys to move, z to stop and q to quit"
     key = _Getch()
     ## If you press w, set the motors to forward
     if key == 'w':
