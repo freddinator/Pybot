@@ -105,6 +105,7 @@ while  1:
     ## If you press w, set the motors to forward
     if key == 'w':
         forward();
+        print "Forward"
         ## and backward	
         
     if key == 's':
