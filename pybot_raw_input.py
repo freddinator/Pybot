@@ -2,43 +2,6 @@
 import RPi.GPIO as GPIO
 import time
 
-##Setup keypress listener
-class _Getch:
-    def __init__(self):
-        try:
-            self.impl = _GetchWindows()
-        except ImportError:
-            self.impl = _GetchUnix()
-
-    def __call__(self): return self.impl()
-
-
-class _GetchUnix:
-    def __init__(self):
-        import tty, sys
-
-    def __call__(self):
-        import sys, tty, termios
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return ch
-
-
-class _GetchWindows:
-    def __init__(self):
-        import msvcrt
-
-    def __call__(self):
-        import msvcrt
-        return msvcrt.getch()
-
-
-
 
 ##setup GPIO - this has to be done somewhere in the code
 GPIO.setmode(GPIO.BOARD)
@@ -101,31 +64,37 @@ def stop():
 
 print "Use the WSAD keys to move, z to stop and q to quit"
 while  1:
-    key = _Getch()
+    killswitchstatus = GPIO.input(10)
+    if killswitchstatus == 1:
+        print("Kill Switch Activated")
+        GPIO.output(10, GPIO.HIGH)
+        GPIO.output(10, GPIO.LOW)
+    key = raw_input()
     ## If you press w, set the motors to forward
     if key == 'w':
-        forward();
-        print "Forward"
+        forward()
+        print "Moving forward"
         ## and backward	
-        
-    if key == 's':
-        reverse();
-        	
+    elif key == 's':
+        reverse()
+        print "Reversing"
         ## left
-    if key == 'a':
-        left();
-        	
+    elif key == 'a':
+        left()
+        print "Turning left"
     ## right	
-    if key == 'd':
-        right();
-	
+    elif key == 'd':
+        right()
+        print "Turning right"
     ## Z stops all motors
-    if key == 'z':
-    	stop();
-        	
+    elif key == 'z':
+    	stop()
+    	print "Stopping movements"
     ## q quits the program and the loop
-    if key == 'q':
-        ## This cleanup routine should be run somewhere to set the pins back
-        GPIO.cleanup()
+    elif key == 'q':
         break
+    else:
+    	print "That keypress was not recognised!"
+GPIO.cleanup()
+print "The script was ended."
         
