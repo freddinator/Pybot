@@ -67,8 +67,9 @@ while  1:
     killswitchstatus = GPIO.input(10)
     if killswitchstatus == 1:
         print("Kill Switch Activated")
-        GPIO.output(10, GPIO.HIGH)
-        GPIO.output(10, GPIO.LOW)
+        GPIO.setup(11, GPIO.OUT)
+        GPIO.output(11, GPIO.LOW)
+        killswitchstatus = 0
     key = raw_input()
     ## If you press w, set the motors to forward
     if key == 'w':
